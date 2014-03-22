@@ -1,10 +1,9 @@
 # fread
 
-[![Build Status](https://secure.travis-ci.org/rob/fread.png?branch=master)](http://travis-ci.org/rob/fread)
+[![Build Status](https://secure.travis-ci.org/rob/fread.png?branch=master)](http://travis-ci.org/rmcvey/fread)
 
-fread is a tiny javascript library that allows you to display uploaded files (currently only CSV files).
+fread is a tiny javascript library that allows you to display uploaded files (currently only CSV files). It has no external dependencies.
 
-Provide an input selector, output table selector and optional before/after callbacks.
 
 ## fread API
 ### options
@@ -24,3 +23,11 @@ Provide an input selector, output table selector and optional before/after callb
         // perform some action with rows array
       }
     });
+
+See examples/index.html for a full example
+
+### Installation
+
+    bower install fread
+
+or Download and include lib/fread.js in your page

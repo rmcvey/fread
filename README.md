@@ -1,0 +1,4 @@
+fread
+=====
+
+Javascript File Reader

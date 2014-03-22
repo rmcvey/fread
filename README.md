@@ -1,6 +1,6 @@
 # fread
 
-[![Build Status](https://secure.travis-ci.org/rob/fread.png?branch=master)](http://travis-ci.org/rmcvey/fread)
+[![Build Status](https://secure.travis-ci.org/rmcvey/fread.png?branch=master)](http://travis-ci.org/rmcvey/fread)
 
 fread is a tiny javascript library that allows you to display uploaded files (currently only CSV files). It has no external dependencies.
 

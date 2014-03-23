@@ -1,3 +1,6 @@
+/*! fread - v0.1.1 - 2014-03-23
+* http://github.com/rmcvey
+* Copyright (c) 2014 Rob McVey; Licensed  */
 // Uses AMD or browser globals to create a module.
 
 // Grabbed from https://github.com/umdjs/umd/blob/master/amdWeb.js.

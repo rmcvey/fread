@@ -27,6 +27,15 @@
     #table-container{
       overflow-x:auto;
     }
+    img.thumb{
+      max-width:100%;
+      height: auto;
+    }
+    div.thumb-container{
+      width:24%;
+      display: inline-block;
+      margin: 5px;
+    }
   </style>
 </head>
 <body>
@@ -35,35 +44,71 @@
       <h1>fread example</h1>
       <p class="lead">Display selected file without uploading.</p>
     </div>
+    <!-- CSV example -->
     <div class="row">
       <div class="col-md-12">
         <span class="btn btn-primary btn-file">
-          Browse <input type="file" id="files" name="files[]" multiple />
+          Browse for CSV file <input type="file" id="files" name="files[]" multiple />
         </span>
       </div>
     </div>
     <br />
     <div class="row">
       <div id="table-container" class="col-md-12">
+        <h3 class="hide">CSV Data <small></small></h3>
       	<table id="list" class="table table-bordered table-striped">
       		<thead></thead>
       		<tbody></tbody>
       	</table>
       </div>
     </div>
+    <!-- Image Example -->
+    <div class="row">
+      <div class="col-md-12">
+        <span class="btn btn-primary btn-file">
+          Browse for Images <input type="file" id="images" name="files[]" multiple />
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div id="image-container" class="col-md-12">
+        <h3 class="hide">Images <small></small></h3>
+        <div id="thumbnails">
+
+        </div>
+      </div>
+    </div>
   </div>
 	<script src="../lib/fread.js"></script>
 	<script>
-	var reader = new fread({
+  // shortcut
+  var $ = document.querySelector.bind(document);
+
+	var csv_reader = new fread({
 		in:  '#files',
 		out: '#list',
 		before: function(e){
       console.log('Triggered before files are processed');
 		},
 		after: function(rows){
-			console.log(rows);
+      console.log(rows);
+      // show header
+      var container = $('#table-container');
+			container.querySelector('h3').className = '';
+      container.querySelector('h3 small').innerHTML = 'Read '+rows.length+' rows';
 		}
 	});
+
+  var img_reader = new fread({
+    in: '#images',
+    out: '#thumbnails',
+    after: function(rows){
+      // show header
+      var container = $('#image-container');
+      container.querySelector('h3').className = '';
+      container.querySelector('h3 small').innerHTML = 'Read '+rows.length+' images';
+    }
+  });
 	</script>
 </body>
 </html>

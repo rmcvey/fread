@@ -90,8 +90,7 @@
 		before: function(e){
       console.log('Triggered before files are processed');
 		},
-		after: function(rows){
-      console.log(rows);
+		after: function(headings, rows){
       // show header
       var container = $('#table-container');
 			container.querySelector('h3').className = '';
@@ -102,12 +101,25 @@
   var img_reader = new fread({
     in: '#images',
     out: '#thumbnails',
-    after: function(rows){
+    after: function(images){
       // show header
       var container = $('#image-container');
       container.querySelector('h3').className = '';
-      container.querySelector('h3 small').innerHTML = 'Read '+rows.length+' images';
-    }
+      container.querySelector('h3 small').innerHTML = 'Read '+images.length+' images';
+    },
+		writer: function(image){
+			var div = document.createElement('div');
+			var img = document.createElement('img');
+
+			div.setAttribute('class', 'thumb-container');
+
+			img.src = image.src;
+			img.setAttribute('title', image.name);
+			img.setAttribute('class', 'thumb');
+
+			div.appendChild(img);
+			document.querySelector('#thumbnails').appendChild(div);
+		}
   });
 	</script>
 </body>

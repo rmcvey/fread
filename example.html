@@ -4,111 +4,123 @@
 	<meta charset="UTF-8" />
 	<title>fread example</title>
 	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
-  <style>
-    .btn-file {
-      position: relative;
-      overflow: hidden;
-    }
-    .btn-file input[type=file] {
-      position: absolute;
-      top: 0;
-      right: 0;
-      min-width: 100%;
-      min-height: 100%;
-      font-size: 999px;
-      text-align: right;
-      filter: alpha(opacity=0);
-      opacity: 0;
-      outline: none;
-      background: white;
-      cursor: inherit;
-      display: block;
-    }
-    #table-container{
-      overflow-x:auto;
-    }
-    img.thumb{
-      max-width:100%;
-      height: auto;
-    }
-    div.thumb-container{
-      width:24%;
-      display: inline-block;
-      margin: 5px;
-    }
-  </style>
+	<style>
+		.btn-file {
+			position: relative;
+			overflow: hidden;
+		}
+		.btn-file input[type=file] {
+			position: absolute;
+			top: 0;
+			right: 0;
+			min-width: 100%;
+			min-height: 100%;
+			font-size: 999px;
+			text-align: right;
+			filter: alpha(opacity=0);
+			opacity: 0;
+			outline: none;
+			background: white;
+			cursor: inherit;
+			display: block;
+		}
+		#table-container{
+			overflow-x:auto;
+		}
+		img.thumb{
+			max-width:100%;
+			height: auto;
+		}
+		div.thumb-container{
+			width:24%;
+			display: inline-block;
+			margin: 5px;
+		}
+	</style>
 </head>
 <body>
-  <div class="container">
-    <div class="page-header">
-      <h1>fread example</h1>
-      <p class="lead">Display selected file without uploading. <a href="index.html">Back to Project Page</a></p>
-    </div>
-    <!-- CSV example -->
-    <div class="row">
-      <div class="col-md-12">
-        <span class="btn btn-primary btn-file">
-          Browse for CSV file <input type="file" id="files" name="files[]" multiple />
-        </span>
-      </div>
-    </div>
-    <br />
-    <div class="row">
-      <div id="table-container" class="col-md-12">
-        <h3 class="hide">CSV Data <small></small></h3>
-      	<table id="list" class="table table-bordered table-striped">
-      		<thead></thead>
-      		<tbody></tbody>
-      	</table>
-      </div>
-    </div>
-    <!-- Image Example -->
-    <div class="row">
-      <div class="col-md-12">
-        <span class="btn btn-primary btn-file">
-          Browse for Images <input type="file" id="images" name="files[]" multiple />
-        </span>
-      </div>
-    </div>
-    <div class="row">
-      <div id="image-container" class="col-md-12">
-        <h3 class="hide">Images <small></small></h3>
-        <div id="thumbnails">
+	<div class="container">
+		<div class="page-header">
+			<h1>fread example</h1>
+			<p class="lead">Display selected file without uploading.</p>
+		</div>
+		<!-- CSV example -->
+		<div class="row">
+			<div class="col-md-12">
+				<span class="btn btn-primary btn-file">
+					Browse for CSV file <input type="file" id="files" name="files[]" multiple />
+				</span>
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div id="table-container" class="col-md-12">
+				<h3 class="hide">CSV Data <small></small></h3>
+				<table id="list" class="table table-bordered table-striped">
+					<thead></thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+		<!-- Image Example -->
+		<div class="row">
+			<div class="col-md-12">
+				<span class="btn btn-primary btn-file">
+					Browse for Images <input type="file" id="images" name="files[]" multiple />
+				</span>
+			</div>
+		</div>
+		<div class="row">
+			<div id="image-container" class="col-md-12">
+				<h3 class="hide">Images <small></small></h3>
+				<div id="thumbnails">
 
-        </div>
-      </div>
-    </div>
-  </div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<script src="https://rawgithub.com/rmcvey/fread/master/lib/fread.js"></script>
 	<script>
-  // shortcut
-  var $ = document.querySelector.bind(document);
+	// shortcut
+	var $ = document.querySelector.bind(document);
 
 	var csv_reader = new fread({
 		in:  '#files',
 		out: '#list',
 		before: function(e){
-      console.log('Triggered before files are processed');
+			console.log('Triggered before files are processed');
 		},
-		after: function(rows){
-      console.log(rows);
-      // show header
-      var container = $('#table-container');
+		after: function(headings, rows){
+			// show header
+			var container = $('#table-container');
 			container.querySelector('h3').className = '';
-      container.querySelector('h3 small').innerHTML = 'Read '+rows.length+' rows';
+			container.querySelector('h3 small').innerHTML = 'Read '+rows.length+' rows';
 		}
 	});
 
-  var img_reader = new fread({
-    in: '#images',
-    out: '#thumbnails',
-    after: function(rows){
-      // show header
-      var container = $('#image-container');
-      container.querySelector('h3').className = '';
-      container.querySelector('h3 small').innerHTML = 'Read '+rows.length+' images';
-    }
-  });
+	var img_reader = new fread({
+		in: '#images',
+		out: '#thumbnails',
+		after: function(images){
+			// show header
+			var container = $('#image-container');
+			container.querySelector('h3').className = '';
+			container.querySelector('h3 small').innerHTML = 'Read '+images.length+' images';
+		},
+		writer: function(image){
+			var div = document.createElement('div');
+			var img = document.createElement('img');
+
+			div.setAttribute('class', 'thumb-container');
+
+			img.src = image.src;
+			img.setAttribute('title', image.name);
+			img.setAttribute('class', 'thumb');
+
+			div.appendChild(img);
+			document.querySelector('#thumbnails').appendChild(div);
+		}
+	});
 	</script>
 </body>
 </html>

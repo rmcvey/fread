@@ -36,6 +36,21 @@
 <pre><code>bower install fread
 </code></pre>
 
+<h3><a name="usage" href="#usage" class="anchor"><span class="octicon octicon-link"></span>usage</a></h3>
+<pre><code>var fread = new fread({
+  in: '#file-input',
+  out: '#table-output',
+  before: function(evt){
+    // perform some action before render
+  },
+  after: function(rows){
+    // perform some action with rows array
+  }
+});
+</code></pre>
+
+<h3><a name="example" href="example.html" class="anchor"><span class="octicon octicon-link"></span>example</a></h3>
+
 <h3>
 <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 

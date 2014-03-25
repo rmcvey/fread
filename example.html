@@ -48,14 +48,31 @@
 		<div class="row">
 			<div class="col-md-12">
 				<span class="btn btn-primary btn-file">
-					Browse for CSV file <input type="file" id="files" name="files[]" multiple />
+					Browse for CSV file (custom render) <input type="file" id="custom-files" name="files[]" multiple />
 				</span>
 			</div>
 		</div>
 		<br />
 		<div class="row">
 			<div id="table-container" class="col-md-12">
-				<h3 class="hide">CSV Data <small></small></h3>
+				<h3 class="hide">CSV Data (custom writer)<small></small></h3>
+				<div id="custom-table">
+					<table id="data" class="table table-bordered table-striped"></table>
+				</div>
+			</div>
+		</div>
+		<!-- CSV default -->
+		<div class="row">
+			<div class="col-md-12">
+				<span class="btn btn-primary btn-file">
+					Browse for CSV file (default render) <input type="file" id="files" name="files[]" multiple />
+				</span>
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<div id="table-container" class="col-md-12">
+				<h3 class="hide">CSV Data (default writer)<small></small></h3>
 				<table id="list" class="table table-bordered table-striped">
 					<thead></thead>
 					<tbody></tbody>
@@ -83,6 +100,50 @@
 	<script>
 	// shortcut
 	var $ = document.querySelector.bind(document);
+	
+	var custom_csv_reader = new fread({
+		in: '#custom-files',
+		writer: function(headings, rows){
+			var table = $('#custom-table table')
+				, head = document.createElement('thead')
+				, hrow = document.createElement('tr')
+				, body = document.createElement('tbody')
+				, x = y = z = 0
+				, max_len = headings.length
+				, email_re =  /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+				, url_re = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+			
+			// write header
+			for( ; x < headings.length; x++){
+				var el = document.createElement('th');
+				el.innerText = headings[x];
+				hrow.appendChild(el)
+			}
+			
+			var fragment = document.createDocumentFragment();
+			for(y = 0; y < rows.length; y++){
+				var cur = rows[y]
+					, row = document.createElement('tr');
+
+				for(z = 0; z < cur.length; z++){
+					var td = document.createElement('td');
+					if(cur[z].match(email_re)){
+						cur[z] = '<a href="mailto:'+cur[z]+'" target="_blank">'+cur[z]+'</a>';
+					} else if(cur[z].match(url_re)){
+						cur[z] = '<a href="'+cur[z]+'" target="_blank">'+cur[z]+'</a>';
+					}
+					td.innerHTML = cur[z];
+					row.appendChild(td);
+				}
+				fragment.appendChild(row);
+			}
+			
+			body.appendChild(fragment);
+			head.appendChild(hrow);
+			table.appendChild(head);
+			table.appendChild(body);
+		}
+	});
 
 	var csv_reader = new fread({
 		in:  '#files',
